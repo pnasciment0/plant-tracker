@@ -8,13 +8,10 @@ const router = express.Router();
 // GET /api/plants
 router.get('/', async (req, res) => {
   try {
-    console.log("titties");
     const plants = await Plant.find().lean()
         .catch((err) => {
             console.log('Error while querying plants:', err);
         });
-    console.log("plants are");
-    console.log(plants);
     res.json(plants);
   } catch (err) {
     console.log(err);
