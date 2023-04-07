@@ -41,4 +41,6 @@ const plantSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Plant', plantSchema);
+const Plant = mongoose.model('Plants', plantSchema);
+
+module.exports = { Plant };

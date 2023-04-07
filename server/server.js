@@ -9,16 +9,17 @@ const plantRoutes = require('./routes/plants');
 
 const app = express();
 
-//test
-
 const ptUser = process.env.USERNAME;
 const ptPass = process.env.PASSWORD;
 
-const connString = `mongodb+srv://${ptUser}:${ptPass}@planttracker.pcllyya.mongodb.net/?retryWrites=true&w=majority`;
+const connString = `mongodb+srv://${ptUser}:${ptPass}@planttracker.pcllyya.mongodb.net/PlantData?retryWrites=true&w=majority`;
 
 // Connect to MongoDB
 mongoose
-  .connect(connString, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(connString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error(err));
 
@@ -29,5 +30,5 @@ app.use(express.json());
 app.use('/api/plants', plantRoutes);
 
 // Start the server
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 81;
 app.listen(port, () => console.log(`Server running on port ${port}`));
