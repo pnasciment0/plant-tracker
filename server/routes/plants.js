@@ -1,7 +1,7 @@
 // routes/plants.js
 
 const express = require('express');
-const { Plant } = require('../database/schema');
+const { Plant } = require('../models/plantsModel');
 
 const router = express.Router();
 
