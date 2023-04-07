@@ -9,6 +9,8 @@ const plantRoutes = require('./routes/plants');
 
 const app = express();
 
+//test
+
 const ptUser = process.env.USERNAME;
 const ptPass = process.env.PASSWORD;
 
