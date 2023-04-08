@@ -1,30 +1,18 @@
 // server.js
-
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Import routes
-const plantRoutes = require('./routes/plants');
+const connectDB = require('./database/connection');
+const plantRoutes = require('./routes/plantRoutes');
 
 const app = express();
-
-const ptUser = process.env.USERNAME;
-const ptPass = process.env.PASSWORD;
-
-const connString = `mongodb+srv://${ptUser}:${ptPass}@planttracker.pcllyya.mongodb.net/PlantData?retryWrites=true&w=majority`;
-
-// Connect to MongoDB
-mongoose
-  .connect(connString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error(err));
-
-// Middleware
+app.use(cors());
 app.use(express.json());
+
+connectDB();
 
 // Routes
 app.use('/api/plants', plantRoutes);

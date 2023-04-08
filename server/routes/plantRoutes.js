@@ -2,22 +2,12 @@
 
 const express = require('express');
 const { Plant } = require('../models/plantsModel');
+const plantController = require('../controllers/plantController');
 
 const router = express.Router();
 
 // GET /api/plants
-router.get('/', async (req, res) => {
-  try {
-    const plants = await Plant.find().lean()
-        .catch((err) => {
-            console.log('Error while querying plants:', err);
-        });
-    res.json(plants);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
-  }
-});
+router.get('/', plantController.getPlants);
 
 // POST /api/plants
 router.post('/', async (req, res) => {

@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
+const schema = mongoose.Schema;
 
-const plantSchema = new mongoose.Schema({
+const { User } = require('../models/usersModel');
+
+const plantSchema = new schema({
+  userId: {
+    type: schema.Types.ObjectId,
+    ref: User,
+    required: true
+  },
   species: {
     type: String,
     required: true
@@ -38,7 +46,14 @@ const plantSchema = new mongoose.Schema({
   },
   soilMix: {
     type: String
-  }
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+      type: Date,
+  },
 });
 
 const Plant = mongoose.model('Plant', plantSchema);
