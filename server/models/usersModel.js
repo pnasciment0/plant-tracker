@@ -39,6 +39,13 @@ const userSchema = new Schema({
     },
 });
 
+userSchema.virtual('plants', {
+    ref: 'Plant',
+    localField: '_id',
+    foreignField: 'userId',
+    justOne: false
+});
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = { User };

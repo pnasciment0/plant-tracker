@@ -9,3 +9,9 @@ exports.getUsers = async (req, res) => {
       res.status(500).send('Server Error');
     }
   };
+
+// exports.getPlantsByUser = async (req, res) => {
+//     try {
+//         const Users = 
+//     }
+// }

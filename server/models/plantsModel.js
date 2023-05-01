@@ -6,7 +6,7 @@ const { User } = require('../models/usersModel');
 const plantSchema = new schema({
   userId: {
     type: schema.Types.ObjectId,
-    ref: User,
+    ref: 'User',
     required: true
   },
   species: {
