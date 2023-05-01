@@ -7,7 +7,7 @@ const userController = require('../controllers/userController');
 const router = express.Router();
 
 // GET /api/users
-router.get('/', userController.getPlants);
+router.get('/', userController.getUsers);
 
 // Create a new user
 router.post('/', async (req, res) => {

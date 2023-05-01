@@ -9,7 +9,10 @@ const router = express.Router();
 // GET /api/plants
 router.get('/', plantController.getPlants);
 
-// TODO: add POST, PUT, DELETE routes to plantController.js
+// GET /api/plants/:id
+router.get('/:id', plantController.getPlantById);
+
+// TODO: move the below POST, PUT, DELETE routes to plantController.js
 
 // POST /api/plants
 router.post('/', async (req, res) => {
