@@ -65,4 +65,18 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// ... existing routes ...
+
+// POST /api/users/:userId/locations/:locationId
+router.post('/:userId/locations/:locationId', userController.addLocationToUser);
+
+// DELETE /api/users/:userId/locations/:locationId
+router.delete('/:userId/locations/:locationId', userController.removeLocationFromUser);
+
+// POST /api/users/:userId/plants/:plantId
+router.post('/:userId/plants/:plantId', userController.addPlantToUser);
+
+// DELETE /api/users/:userId/plants/:plantId
+router.delete('/:userId/plants/:plantId', userController.removePlantFromUser);
+
 module.exports = router;
