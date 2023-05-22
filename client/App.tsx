@@ -5,7 +5,8 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Plant } from './src/types';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -24,6 +25,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import { fetchData } from './apiHelper'; // make sure this path points to your apiHelper file
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -58,6 +61,29 @@ function Section({children, title}: SectionProps): JSX.Element {
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
+  const [data, setData] = useState<Array<Plant> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchData()
+      .then(json => {
+        console.log("returning data");
+        console.log(json);
+        setData(json);
+        setLoading(false);
+      })
+      .catch(error => {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError('Unknown error occurred');
+        }
+        setLoading(false);
+      });
+  }, []);
+
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -77,7 +103,7 @@ function App(): JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
+            Edit <Text style={styles.highlight}>App.tsx</Text> to change this VAGINE 
             screen and then come back to see your edits.
           </Section>
           <Section title="See Your Changes">
@@ -88,6 +114,14 @@ function App(): JSX.Element {
           </Section>
           <Section title="Learn More">
             Read the docs to discover what to do next:
+          </Section>
+          <Section title="Plant Data">
+            {loading ? 
+              <Text style={styles.highlight}>Summoning plants from the ether...</Text> :
+              error ? 
+                <Text style={styles.highlight}>Error: {error}</Text> :
+                  <Text>{data ? data.map((plant) => <Text key={plant._id}>{plant.name}{plant.species}</Text>) :
+                   <Text>Seems like we're fresh out of data.</Text>}</Text>}
           </Section>
           <LearnMoreLinks />
         </View>
