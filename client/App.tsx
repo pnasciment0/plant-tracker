@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Plant } from './src/types';
+import { Plant } from './src/types/types';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -26,7 +26,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { fetchData } from './apiHelper'; // make sure this path points to your apiHelper file
+import { fetchData } from './src/api/apiHelper'; // make sure this path points to your apiHelper file
+import TabNavigator from './src/navigation/TabNavigator';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -126,6 +127,7 @@ function App(): JSX.Element {
           <LearnMoreLinks />
         </View>
       </ScrollView>
+      <TabNavigator/>
     </SafeAreaView>
   );
 }
