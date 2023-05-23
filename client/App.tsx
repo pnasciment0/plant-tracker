@@ -5,7 +5,9 @@
  * @format
  */
 
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { Plant } from './src/types/types';
 import type {PropsWithChildren} from 'react';
 import {
@@ -104,7 +106,7 @@ function App(): JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this VAGINE 
+            Edit <Text style={styles.highlight}>App.tsx</Text> to change this VdddAGINE 
             screen and then come back to see your edits.
           </Section>
           <Section title="See Your Changes">
@@ -124,10 +126,10 @@ function App(): JSX.Element {
                   <Text>{data ? data.map((plant) => <Text key={plant._id}>{plant.name}{plant.species}</Text>) :
                    <Text>Seems like we're fresh out of data.</Text>}</Text>}
           </Section>
-          <LearnMoreLinks />
+          {/* <LearnMoreLinks /> */}
         </View>
+        <TabNavigator/>
       </ScrollView>
-      <TabNavigator/>
     </SafeAreaView>
   );
 }
