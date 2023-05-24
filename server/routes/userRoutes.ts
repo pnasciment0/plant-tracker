@@ -1,24 +1,20 @@
 // server/routes/userRoutes.js
 
-const express = require('express');
+import express from 'express';
 const { User } = require('../models/usersModel');
 const userController = require('../controllers/userController');
+const { check, validationResult } = require('express-validator');
 
 const router = express.Router();
 
+// Create a new user
+router.post('/register', [
+  check('username', 'Username is required').not().isEmpty(),
+  check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8 })
+],  userController.register);
+
 // GET /api/users
 router.get('/', userController.getUsers);
-
-// Create a new user
-router.post('/', async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
 
 // Get a single user by ID
 router.get('/:id', async (req, res) => {
@@ -30,7 +26,8 @@ router.get('/:id', async (req, res) => {
       res.status(200).json(user);
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    const message = (error as Error).message;
+    res.status(500).json({ message });
   }
 });
 
@@ -47,7 +44,8 @@ router.put('/:id', async (req, res) => {
       res.status(200).json(updatedUser);
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    const message = (error as Error).message;
+    res.status(400).json({ message });
   }
 });
 
@@ -61,7 +59,8 @@ router.delete('/:id', async (req, res) => {
       res.status(200).json({ message: 'User deleted successfully' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    const message = (error as Error).message;
+    res.status(500).json({ message });
   }
 });
 
@@ -79,4 +78,4 @@ router.post('/:userId/plants/:plantId', userController.addPlantToUser);
 // DELETE /api/users/:userId/plants/:plantId
 router.delete('/:userId/plants/:plantId', userController.removePlantFromUser);
 
-module.exports = router;
+export default router;

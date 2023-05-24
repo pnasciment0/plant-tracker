@@ -1,8 +1,9 @@
 const { Plant } = require('../models/plantsModel');
+import { Request, Response } from 'express';
 
 // ========= GET ==========
 
-exports.getPlants = async (req, res) => {
+exports.getPlants = async (req: Request, res: Response) => {
     try {
       const plants = await Plant.find();
       res.json(plants);
@@ -12,14 +13,14 @@ exports.getPlants = async (req, res) => {
     }
   };
 
-exports.getPlantById = async (req, res) => {
+exports.getPlantById = async (req: Request, res: Response) => {
     try {
       const plant = await Plant.findById(req.params.id);
       if (!plant) {
         return res.status(404).json({ msg: 'Plant not found' });
       }
       res.json(plant);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       if (err.kind === 'ObjectId') {
         return res.status(404).json({ msg: 'Plant not found' });
@@ -36,7 +37,7 @@ exports.getPlantById = async (req, res) => {
 
 // ========= POST ==========
 
-exports.addPlant = async (req, res) => {
+exports.addPlant = async (req: Request, res: Response) => {
   try {
     const plant = new Plant(req.body);
     await plant.save();
@@ -48,7 +49,7 @@ exports.addPlant = async (req, res) => {
 
 // ========= PUT ==========
 
-exports.updatePlantById = async (req, res) => {
+exports.updatePlantById = async (req: Request, res: Response) => {
   try {
     const plant = await Plant.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!plant) {
@@ -62,7 +63,7 @@ exports.updatePlantById = async (req, res) => {
 
 // ========= DELETE ==========
 
-exports.deletePlant = async (req, res) => {
+exports.deletePlant = async (req: Request, res: Response) => {
   try {
     const plant = await Plant.findByIdAndDelete(req.params.id);
     if (!plant) {

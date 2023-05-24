@@ -1,13 +1,14 @@
-// server.js
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
+// server.ts
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Import routes
-const connectDB = require('./database/connection');
-const plantRoutes = require('./routes/plantRoutes');
-const userRoutes = require('./routes/userRoutes');
+import connectDB from './database/connection';
+import plantRoutes from './routes/plantRoutes';
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 app.use(cors());

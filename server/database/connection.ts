@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 require('dotenv').config();
 
 const ptUser = process.env.USERNAME;
@@ -8,14 +8,14 @@ const connString = `mongodb+srv://${ptUser}:${ptPass}@planttracker.pcllyya.mongo
 const connectDB = async () => {
     try {
       await mongoose.connect(connString, {
-        useNewUrlParser: true,
         useUnifiedTopology: true,
-      });
+      } as any);
       console.log('MongoDB connected...');
     } catch (err) {
-      console.error(err.message);
+      const message = (err as Error).message;
+      console.error(message);
       process.exit(1);
     }
   };
   
-module.exports = connectDB;
+export default connectDB;

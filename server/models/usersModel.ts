@@ -1,7 +1,19 @@
 // User.js
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose, { Document, Schema } from 'mongoose';
+
+interface IUser extends Document {
+    username: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    createdAt: Date;
+    updatedAt?: Date;
+    tokens: { token: string }[];
+    locations: mongoose.Types.ObjectId[];
+    plants: mongoose.Types.ObjectId[];
+}
 
 const userSchema = new Schema({
     username: {
@@ -44,15 +56,18 @@ const userSchema = new Schema({
           required: true
         }
     }],
+    locations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Location' }],
+    plants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Plant' }],
 });
 
-userSchema.virtual('plants', {
+userSchema.virtual('vPlants', {
     ref: 'Plant',
     localField: '_id',
     foreignField: 'userId',
     justOne: false
 });
 
-const User = mongoose.model('User', userSchema);
+// const User = mongoose.model('User', userSchema);
+export type { IUser };
 
-module.exports = { User };
+export const User = mongoose.model<IUser>('User', userSchema);

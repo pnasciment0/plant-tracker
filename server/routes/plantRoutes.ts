@@ -1,6 +1,8 @@
 // routes/plants.js
 
-const express = require('express');
+import express from 'express';
+
+const auth = require('../middlewares/auth');
 const plantController = require('../controllers/plantController');
 
 const router = express.Router();
@@ -20,4 +22,4 @@ router.put('/:id', plantController.updatePlantById);
 // DELETE /api/plants/:id
 router.delete('/:id', plantController.deletePlant);
 
-module.exports = router;
+export default router;

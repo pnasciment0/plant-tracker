@@ -2,9 +2,11 @@ const { Location } = require('../models/locationsModel');
 const { Plant } = require('../models/plantsModel');
 const { User } = require('../models/usersModel');
 
+import { Request, Response } from 'express';
+
 // ========= GET ==========
 
-exports.getLocations = async (req, res) => {
+exports.getLocations = async (req: Request, res: Response) => {
     try {
       const locations = await Location.find().populate('plants');
       res.json(locations);
@@ -14,14 +16,14 @@ exports.getLocations = async (req, res) => {
     }
 };
 
-exports.getLocationById = async (req, res) => {
+exports.getLocationById = async (req: Request, res: Response) => {
     try {
       const location = await Location.findById(req.params.id).populate('plants');
       if (!location) {
         return res.status(404).json({ msg: 'Location not found' });
       }
       res.json(location);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       if (err.kind === 'ObjectId') {
         return res.status(404).json({ msg: 'Location not found' });
@@ -32,7 +34,7 @@ exports.getLocationById = async (req, res) => {
 
 // ========= POST ==========
 
-exports.addLocation = async (req, res) => {
+exports.addLocation = async (req: Request, res: Response) => {
   try {
     const location = new Location(req.body);
     await location.save();
@@ -44,7 +46,7 @@ exports.addLocation = async (req, res) => {
 
 // ========= PUT ==========
 
-exports.updateLocationById = async (req, res) => {
+exports.updateLocationById = async (req: Request, res: Response) => {
   try {
     const location = await Location.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!location) {
@@ -58,7 +60,7 @@ exports.updateLocationById = async (req, res) => {
 
 // ========= DELETE ==========
 
-exports.deleteLocation = async (req, res) => {
+exports.deleteLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.findByIdAndDelete(req.params.id);
     if (!location) {
@@ -72,7 +74,7 @@ exports.deleteLocation = async (req, res) => {
 
 // ========= ADD/REMOVE PLANT ==========
 
-exports.addPlantToLocation = async (req, res) => {
+exports.addPlantToLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.findById(req.params.locationId);
     const plant = await Plant.findById(req.params.plantId);
@@ -87,7 +89,7 @@ exports.addPlantToLocation = async (req, res) => {
   }
 }
 
-exports.removePlantFromLocation = async (req, res) => {
+exports.removePlantFromLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.findById(req.params.locationId);
     const plant = await Plant.findById(req.params.plantId);
@@ -104,7 +106,7 @@ exports.removePlantFromLocation = async (req, res) => {
 
 // ========= MOVE PLANT ==========
 
-exports.movePlantToAnotherLocation = async (req, res) => {
+exports.movePlantToAnotherLocation = async (req: Request, res: Response) => {
   try {
     const sourceLocation = await Location.findById(req.params.sourceLocationId);
     const targetLocation = await Location.findById(req.params.targetLocationId);
