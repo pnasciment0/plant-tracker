@@ -20,7 +20,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6,
+        minlength: 8,
     },
     firstName: {
         type: String,
@@ -38,6 +38,12 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    tokens: [{
+        token: {
+          type: String,
+          required: true
+        }
+    }],
 });
 
 userSchema.virtual('plants', {

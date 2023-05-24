@@ -28,6 +28,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
+
 import { fetchData } from './src/api/apiHelper'; // make sure this path points to your apiHelper file
 import TabNavigator from './src/navigation/TabNavigator';
 
@@ -92,6 +95,7 @@ function App(): JSX.Element {
   };
 
   return (
+  <Provider store={store}>
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
@@ -131,6 +135,7 @@ function App(): JSX.Element {
         <TabNavigator/>
       </ScrollView>
     </SafeAreaView>
+    </Provider>
   );
 }
 
