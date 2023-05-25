@@ -1,11 +1,14 @@
 // server/routes/userRoutes.js
 
 import express from 'express';
-const { User } = require('../models/usersModel');
-const userController = require('../controllers/userController');
-const { check, validationResult } = require('express-validator');
+import { User } from '../models/usersModel';
+import * as userController from '../controllers/userController';
+import { check, validationResult } from 'express-validator';
+import { authMiddleware } from '../middlewares/auth';
 
 const router = express.Router();
+
+router.get('/me', authMiddleware, userController.getAuthUser);
 
 // Create a new user
 router.post('/register', [

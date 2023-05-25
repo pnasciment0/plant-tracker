@@ -8,7 +8,7 @@ require('dotenv').config();
 
 import { Request, Response } from 'express';
 
-exports.getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response) => {
     try {
       const users = await User.find();
       res.json(users);
@@ -18,33 +18,53 @@ exports.getUsers = async (req: Request, res: Response) => {
     }
   };
 
-  // Registration function
-  exports.register = async (req: Request, res: Response) => {
-    const { username, password } = req.body;
-    
-    // check if user already exists
-    let user = await User.findOne({ username });
-    if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+export const getAuthUser = async (req: Request, res: Response) => {
+// req.user is assigned in the authMiddleware
+// Assuming that user in req.user only contains the user's ID at this stage
+  if (!req.user) {
+    res.status(401).send({ error: 'Not authorized' });
+    return;
+  }
+  
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      res.status(404).send({ error: 'User not found' });
+    } else {
+      res.send(user);
     }
+  } catch (err) {
+    res.status(500).send({ error: 'Server error' });
+  }
+};
 
-    // hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+// Registration function
+export const register = async (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  
+  // check if user already exists
+  let user = await User.findOne({ username });
+  if (user) {
+    return res.status(400).json({ msg: 'User already exists' });
+  }
 
-    // create a new user with all the parameters from the request body
-    user = new User({
-      ...req.body,
-      password: hashedPassword,
-    });
+  // hash the password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-    await user.save();
+  // create a new user with all the parameters from the request body
+  user = new User({
+    ...req.body,
+    password: hashedPassword,
+  });
 
-    res.status(201).json({ msg: 'User registered' });
-  };
+  await user.save();
+
+  res.status(201).json({ msg: 'User registered' });
+};
 
   // Login function
-exports.login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   // check if user exists
@@ -71,7 +91,7 @@ exports.login = async (req: Request, res: Response) => {
 
   // ========= ADD/REMOVE LOCATION ==========
 
-exports.addLocationToUser = async (req: Request, res: Response) => {
+export const addLocationToUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.userId);
     const location = await Location.findById(req.params.locationId);
@@ -86,7 +106,7 @@ exports.addLocationToUser = async (req: Request, res: Response) => {
   }
 }
 
-exports.removeLocationFromUser = async (req: Request, res: Response) => {
+export const removeLocationFromUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.userId);
     const location = await Location.findById(req.params.locationId);
@@ -103,7 +123,7 @@ exports.removeLocationFromUser = async (req: Request, res: Response) => {
 
 // ========= ADD/REMOVE PLANT ==========
 
-exports.addPlantToUser = async (req: Request, res: Response) => {
+export const addPlantToUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.userId);
     const plant = await Plant.findById(req.params.plantId);
@@ -118,7 +138,7 @@ exports.addPlantToUser = async (req: Request, res: Response) => {
   }
 }
 
-exports.removePlantFromUser = async (req: Request, res: Response) => {
+export const removePlantFromUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.userId);
     const plant = await Plant.findById(req.params.plantId);
@@ -133,7 +153,7 @@ exports.removePlantFromUser = async (req: Request, res: Response) => {
   }
 }
 
-// exports.getPlantsByUser = async (req, res) => {
+// export const getPlantsByUser = async (req, res) => {
 //     try {
 //         const Users = 
 //     }
