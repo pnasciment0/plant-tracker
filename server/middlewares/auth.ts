@@ -14,7 +14,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as IUserToken;
-    req.body.user = decoded._id;
+    res.locals.user = { id: decoded._id };
 
     next();
   } catch (err) {

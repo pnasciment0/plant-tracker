@@ -21,13 +21,13 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getAuthUser = async (req: Request, res: Response) => {
 // req.user is assigned in the authMiddleware
 // Assuming that user in req.user only contains the user's ID at this stage
-  if (!req.user) {
+  if (!res.locals.user) {
     res.status(401).send({ error: 'Not authorized' });
     return;
   }
   
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(res.locals.user.id).select('-password');
     if (!user) {
       res.status(404).send({ error: 'User not found' });
     } else {
