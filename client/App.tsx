@@ -31,7 +31,7 @@ import {
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 
-import { fetchData } from './src/api/apiHelper'; // make sure this path points to your apiHelper file
+import ApiFunctions from './src/api/apiHelper'; // make sure this path points to your apiHelper file
 import TabNavigator from './src/navigation/TabNavigator';
 
 type SectionProps = PropsWithChildren<{
@@ -72,11 +72,15 @@ function App(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchData()
+    ApiFunctions.fetchAllPlants()
       .then(json => {
         console.log("returning data");
         console.log(json);
-        setData(json);
+        if (json.error) {
+          setError(json.error);
+        } else {
+          setData(json.data || null);
+        }
         setLoading(false);
       })
       .catch(error => {
