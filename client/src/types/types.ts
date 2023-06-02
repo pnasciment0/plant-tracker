@@ -1,3 +1,13 @@
+// // ================== Utilities ==================== //
+
+export type APIResponse<T> = {
+    data?: T;
+    error?: string;
+};
+
+
+// ================== Wtrd Data ==================== //
+
 export interface Plant {
     _id: string;
     createdAt: string;

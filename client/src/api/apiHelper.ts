@@ -1,11 +1,5 @@
 import axios from 'axios';
-import { Plant } from '../types/types';
-
-// apiHelper.ts
-type APIResponse<T> = {
-    data?: T;
-    error?: string;
-};
+import { APIResponse, Plant } from '../types/types';
 
 // ================== HTTP Helper Functions ==================== //
 
