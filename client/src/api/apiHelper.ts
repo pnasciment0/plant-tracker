@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APIResponse, Plant } from '../types/types';
+import { APIResponse, Plant, User } from '../types/types';
 
 // ================== HTTP Helper Functions ==================== //
 
@@ -55,6 +55,11 @@ async function fetchAllPlants(): Promise<APIResponse<Plant[]>> {
   }
 }
 
+async function getMe(): Promise<APIResponse<User>> {
+  const API_URL = 'http://localhost:81/users/me'
+  const res = await axios.get(API_URL, { withCredentials: true });
+  return res.data;
+}
 
 // ============== Export ================ //
 
@@ -62,7 +67,8 @@ const fns = {
   getFromAPI,
   postToAPI,
   putToAPI,
-  fetchAllPlants
+  fetchAllPlants,
+  getMe
 };
 
 export default fns;

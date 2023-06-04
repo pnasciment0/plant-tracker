@@ -28,8 +28,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { Provider } from 'react-redux';
-import { store } from './src/redux/store';
+import { Provider, useDispatch } from 'react-redux';
+import { AnyAction } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import TestDispatchComponent from './TestComponent';
+import { store, RootState } from './src/redux/store';
+import { fetchMe } from './src/redux/authSlice';
 
 import ApiFunctions from './src/api/apiHelper'; // make sure this path points to your apiHelper file
 import TabNavigator from './src/navigation/TabNavigator';
@@ -64,12 +68,29 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  )
+}
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const [data, setData] = useState<Array<Plant> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // const dispatch = useDispatch();
+  const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch();
+  // const dispatch = store.dispatch;
+
+  useEffect(() => {
+    console.log('Dispatching...');
+    dispatch(fetchMe());
+  }, [dispatch]);
 
   useEffect(() => {
     ApiFunctions.fetchAllPlants()
@@ -100,45 +121,48 @@ function App(): JSX.Element {
 
   return (
   <Provider store={store}>
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this VdddAGINE 
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <Section title="Plant Data">
-            {loading ? 
-              <Text style={styles.highlight}>Summoning plants from the ether...</Text> :
-              error ? 
-                <Text style={styles.highlight}>Error: {error}</Text> :
-                  <Text>{data ? data.map((plant) => <Text key={plant._id}>{plant.name}{plant.species}</Text>) :
-                   <Text>Seems like we're fresh out of data.</Text>}</Text>}
-          </Section>
-          {/* <LearnMoreLinks /> */}
-        </View>
-        <TabNavigator/>
-      </ScrollView>
-    </SafeAreaView>
+    {/* <TestDispatchComponent /> */}
+    <NavigationContainer>
+      <SafeAreaView style={backgroundStyle}>
+        <StatusBar
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+          backgroundColor={backgroundStyle.backgroundColor}
+        />
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={backgroundStyle}>
+          <Header />
+          <View
+            style={{
+              backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            }}>
+            <Section title="Step One">
+              Edit <Text style={styles.highlight}>App.tsx</Text> to change this VdddAGINE 
+              screen and then come back to see your edits.
+            </Section>
+            <Section title="See Your Changes">
+              <ReloadInstructions />
+            </Section>
+            <Section title="Debug">
+              <DebugInstructions />
+            </Section>
+            <Section title="Learn More">
+              Read the docs to discover what to do next:
+            </Section>
+            <Section title="Plant Data">
+              {loading ? 
+                <Text style={styles.highlight}>Summoning plants from the ether...</Text> :
+                error ? 
+                  <Text style={styles.highlight}>Error: {error}</Text> :
+                    <Text>{data ? data.map((plant) => <Text key={plant._id}>{plant.name}{plant.species}</Text>) :
+                    <Text>Seems like we're fresh out of data.</Text>}</Text>}
+            </Section>
+            {/* <LearnMoreLinks /> */}
+          </View>
+          <TabNavigator/>
+        </ScrollView>
+      </SafeAreaView>
+    </NavigationContainer>
     </Provider>
   );
 }
@@ -162,4 +186,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+// export default App;
+export default AppWrapper;

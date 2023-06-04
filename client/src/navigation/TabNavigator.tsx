@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native';
 
 // Import the necessary modules
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Assume these are your two screens
@@ -27,12 +26,10 @@ const Tab = createBottomTabNavigator();
 function App() {
   console.log("hi");
   return (
-    <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
   );
 }
 

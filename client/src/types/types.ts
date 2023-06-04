@@ -8,6 +8,11 @@ export type APIResponse<T> = {
 
 // ================== Wtrd Data ==================== //
 
+export interface User {
+    id: string;
+    name: string;
+}
+
 export interface Plant {
     _id: string;
     createdAt: string;
