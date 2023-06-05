@@ -6,7 +6,7 @@
  */
 
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Plant } from './src/types/types';
 import type {PropsWithChildren} from 'react';
@@ -28,12 +28,14 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import TestDispatchComponent from './TestComponent';
 import { store, RootState } from './src/redux/store';
 import { fetchMe } from './src/redux/authSlice';
+import { AuthContext, AuthProvider } from './src/AuthContext';
+import { AuthStackNavigator, MainStackNavigator } from './src/navigation/StackNavigator';
+import LoadingScreen from './src/screens/LoadingScreen'
 
 import ApiFunctions from './src/api/apiHelper'; // make sure this path points to your apiHelper file
 import TabNavigator from './src/navigation/TabNavigator';
@@ -77,15 +79,15 @@ const AppWrapper = () => {
 }
 
 function App(): JSX.Element {
+  console.log("[APP INITIALIZED]");
   const isDarkMode = useColorScheme() === 'dark';
 
   const [data, setData] = useState<Array<Plant> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // const dispatch = useDispatch();
   const dispatch: ThunkDispatch<RootState, undefined, AnyAction> = useDispatch();
-  // const dispatch = store.dispatch;
+  const auth = useContext(AuthContext);
 
   useEffect(() => {
     console.log('Dispatching...');
@@ -119,51 +121,22 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  useEffect(() => {
+    console.log("Loading state changed:", auth.loading);
+  }, [auth.loading]);
+
   return (
-  <Provider store={store}>
-    {/* <TestDispatchComponent /> */}
-    <NavigationContainer>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={backgroundStyle}>
-          <Header />
-          <View
-            style={{
-              backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            }}>
-            <Section title="Step One">
-              Edit <Text style={styles.highlight}>App.tsx</Text> to change this VdddAGINE 
-              screen and then come back to see your edits.
-            </Section>
-            <Section title="See Your Changes">
-              <ReloadInstructions />
-            </Section>
-            <Section title="Debug">
-              <DebugInstructions />
-            </Section>
-            <Section title="Learn More">
-              Read the docs to discover what to do next:
-            </Section>
-            <Section title="Plant Data">
-              {loading ? 
-                <Text style={styles.highlight}>Summoning plants from the ether...</Text> :
-                error ? 
-                  <Text style={styles.highlight}>Error: {error}</Text> :
-                    <Text>{data ? data.map((plant) => <Text key={plant._id}>{plant.name}{plant.species}</Text>) :
-                    <Text>Seems like we're fresh out of data.</Text>}</Text>}
-            </Section>
-            {/* <LearnMoreLinks /> */}
-          </View>
-          <TabNavigator/>
-        </ScrollView>
-      </SafeAreaView>
-    </NavigationContainer>
-    </Provider>
+    <AuthProvider>
+      <NavigationContainer>
+          {auth.loading ? (
+            <LoadingScreen />  // This could be a simple spinner
+          ) : auth.user ? (
+            <MainStackNavigator />
+          ) : (
+            <AuthStackNavigator />
+          )}
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
 

@@ -21,6 +21,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getAuthUser = async (req: Request, res: Response) => {
 // req.user is assigned in the authMiddleware
 // Assuming that user in req.user only contains the user's ID at this stage
+  console.log("HITTING GET AUTH USER");
   if (!res.locals.user) {
     res.status(401).send({ error: 'Not authorized' });
     return;

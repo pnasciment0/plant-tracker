@@ -7,6 +7,7 @@ interface IUserToken {
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("hi auth middle!");
   try {
     const token = req.header('x-auth-token');
     if (!token) {

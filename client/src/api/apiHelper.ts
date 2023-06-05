@@ -56,9 +56,17 @@ async function fetchAllPlants(): Promise<APIResponse<Plant[]>> {
 }
 
 async function getMe(): Promise<APIResponse<User>> {
-  const API_URL = 'http://localhost:81/users/me'
+  const API_URL = 'http://localhost:81/api/users/me';
+  try {
   const res = await axios.get(API_URL, { withCredentials: true });
+  console.log("data is:")
+  console.log(res);
   return res.data;
+  } catch (error: any) {
+    // console.log('jdlkj');
+    throw error;
+  }
+ 
 }
 
 // ============== Export ================ //

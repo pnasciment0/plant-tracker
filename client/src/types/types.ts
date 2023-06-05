@@ -5,6 +5,11 @@ export type APIResponse<T> = {
     error?: string;
 };
 
+export type AuthState = {
+    user: User | null;
+    loading: "idle" | "loading";
+}
+
 
 // ================== Wtrd Data ==================== //
 
