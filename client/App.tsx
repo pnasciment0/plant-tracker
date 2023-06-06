@@ -37,7 +37,7 @@ import { AuthContext, AuthProvider } from './src/AuthContext';
 import { AuthStackNavigator, MainStackNavigator } from './src/navigation/StackNavigator';
 import LoadingScreen from './src/screens/LoadingScreen'
 
-import ApiFunctions from './src/api/apiHelper'; // make sure this path points to your apiHelper file
+import ApiFunctions from './src/api/apiHelper';
 import TabNavigator from './src/navigation/TabNavigator';
 
 type SectionProps = PropsWithChildren<{
@@ -73,7 +73,9 @@ function Section({children, title}: SectionProps): JSX.Element {
 const AppWrapper = () => {
   return (
     <Provider store={store}>
-      <App/>
+      <AuthProvider>
+        <App/>
+      </AuthProvider>
     </Provider>
   )
 }
@@ -126,18 +128,16 @@ function App(): JSX.Element {
   }, [auth.loading]);
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-          {auth.loading ? (
-            <LoadingScreen />  // This could be a simple spinner
-          ) : auth.user ? (
-            <MainStackNavigator />
-          ) : (
-            <AuthStackNavigator />
-          )}
-      </NavigationContainer>
-    </AuthProvider>
-  );
+    <NavigationContainer>
+        {auth.loading === 'loading' ? (
+          <LoadingScreen />  // This could be a simple spinner
+        ) : auth.user ? (
+          <MainStackNavigator />
+        ) : (
+          <AuthStackNavigator />
+        )}
+    </NavigationContainer>
+);
 }
 
 const styles = StyleSheet.create({
