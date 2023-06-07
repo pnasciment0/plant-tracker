@@ -21,7 +21,6 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getAuthUser = async (req: Request, res: Response) => {
 // req.user is assigned in the authMiddleware
 // Assuming that user in req.user only contains the user's ID at this stage
-  console.log("HITTING GET AUTH USER");
   if (!res.locals.user) {
     res.status(401).send({ error: 'Not authorized' });
     return;
@@ -42,7 +41,6 @@ export const getAuthUser = async (req: Request, res: Response) => {
 // Registration function
 export const register = async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  
   // check if user already exists
   let user = await User.findOne({ username });
   if (user) {
@@ -71,13 +69,13 @@ export const login = async (req: Request, res: Response) => {
   // check if user exists
   const user = await User.findOne({ username });
   if (!user) {
-    return res.status(400).json({ msg: 'Invalid credentials' });
+    return res.status(400).json({ msg: 'Invalid user credentials' });
   }
 
   // validate password
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.status(400).json({ msg: 'Invalid credentials' });
+    return res.status(400).json({ msg: 'Invalid password credentials' });
   }
 
   // generate jwt

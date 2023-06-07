@@ -16,6 +16,12 @@ router.post('/register', [
   check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8 })
 ],  userController.register);
 
+// Login
+router.post('/login', [
+  check('username', 'Username is required').not().isEmpty(),
+  check('password', 'Password is required').not().isEmpty()
+], userController.login);
+
 // GET /api/users
 router.get('/', userController.getUsers);
 

@@ -33,7 +33,7 @@ import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { store, RootState } from './src/redux/store';
 import { fetchMe } from './src/redux/authSlice';
-import { AuthContext, AuthProvider } from './src/AuthContext';
+import { AuthContext, AuthProvider } from './src/redux/AuthContext';
 import { AuthStackNavigator, MainStackNavigator } from './src/navigation/StackNavigator';
 import LoadingScreen from './src/screens/LoadingScreen'
 
@@ -122,10 +122,6 @@ function App(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
-  useEffect(() => {
-    console.log("Loading state changed:", auth.loading);
-  }, [auth.loading]);
 
   return (
     <NavigationContainer>

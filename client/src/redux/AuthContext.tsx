@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
-import { User } from './types/types'
-import { AuthState } from './types/types';
-import ApiFunctions from './api/apiHelper';
+import { User } from '../types/types'
+import { AuthState } from '../types/types';
+import ApiFunctions from '../api/apiHelper';
 
 const AuthContext = React.createContext<AuthState>({
     user: null,
@@ -13,12 +13,10 @@ const AuthContext = React.createContext<AuthState>({
   }  
 
  const AuthProvider: React.FC<AuthProviderProps>  = ({ children }) => {
-  console.log("hi auth provider");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<'idle' | 'loading'>('idle');
 
   const verifyAuth = async () => {
-    console.log("set loading");
     setLoading('loading');
     try {
       const res = await ApiFunctions.getMe();
@@ -30,7 +28,6 @@ const AuthContext = React.createContext<AuthState>({
     } catch (error) {
       console.error("Failed to verify auth", error);
     } finally {
-      console.log("set to idle");
       setLoading('idle');
     }
   };

@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { APIResponse, Plant, User } from '../types/types';
+import { Message, APIResponse, Plant, User, LoginResponse } from '../types/types';
 
 // ================== HTTP Helper Functions ==================== //
+
+const BASE_API_URL = 'http://localhost:81/api';
 
 async function getFromAPI<T>(endpoint: string): Promise<APIResponse<T>> {
   try {
@@ -46,27 +48,49 @@ async function putToAPI<T, U>(endpoint: string, payload: U): Promise<APIResponse
 // ============== Basic API Functions ================ //
 
 async function fetchAllPlants(): Promise<APIResponse<Plant[]>> {
-  const API_URL = 'http://localhost:81/api/plants/';
   try {
-    const plantData = await getFromAPI<Plant[]>(API_URL);
+    const plantData = await getFromAPI<Plant[]>(`${BASE_API_URL}/plants`);
     return plantData;
   } catch (error: any) {
     throw new Error(error.message);
   }
 }
 
-async function getMe(): Promise<APIResponse<User>> {
-  const API_URL = 'http://localhost:81/api/users/me';
+async function getMe(): Promise<APIResponse<User, string>> {
+  // TODO: convert the axios.get call to using getFromAPI() found in this file
   try {
-  const res = await axios.get(API_URL, { withCredentials: true });
-  console.log("data is:")
-  console.log(res);
-  return res.data;
+    const res = await axios.get(`${BASE_API_URL}/users/me`, { withCredentials: true });
+    return res.data;
   } catch (error: any) {
-    // console.log('jdlkj');
     throw error;
+  } 
+}
+
+async function registerUser(username: string, password: string): Promise<APIResponse<Message>> {
+   try {
+    const payload = {
+      username,
+      password
+    }
+    const response = await postToAPI(`${BASE_API_URL}/users/register`, payload);
+    return { data: response.data as Message};
+   } catch (error: any) {
+    return {error: error.response?.data?.msg || error.message }
+   }
+
+}
+
+async function userLogin(username: string, password: string): Promise<APIResponse<LoginResponse>> {
+  try {
+    const payload = {
+      username,
+      password
+    }
+    const response = await postToAPI(`${BASE_API_URL}/users/login`, payload);
+    return { data: response.data as LoginResponse};
+  } catch (error: any) {
+    return {error: error.response?.data?.msg || error.message }
   }
- 
 }
 
 // ============== Export ================ //
@@ -76,7 +100,9 @@ const fns = {
   postToAPI,
   putToAPI,
   fetchAllPlants,
-  getMe
+  getMe,
+  registerUser,
+  userLogin
 };
 
 export default fns;

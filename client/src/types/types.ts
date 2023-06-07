@@ -1,9 +1,18 @@
 // // ================== Utilities ==================== //
 
-export type APIResponse<T> = {
+export interface Message {
+    msg: string;
+}
+
+export type APIResponse<T, E = string> = {
     data?: T;
-    error?: string;
+    error?: E;
 };
+
+export interface LoginResponse {
+    user: User;
+    token: string;
+}
 
 export type AuthState = {
     user: User | null;

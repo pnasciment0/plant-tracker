@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/authSlice';
+import { AppDispatch } from '../redux/store';
+import { loginUser } from '../redux/authSlice';
 
 const LoginScreen = () => {
-const dispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     // For now, let's just simulate a user logging in with a static user object.
-    const user = { name: 'Tony', email: 'tony@starkindustries.com' };
+    const user = { username: 'paulo', password: 'pass12388' };
 
-    dispatch(login(user));
+    dispatch(loginUser(user));
   };
 
   return (
