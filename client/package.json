@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "npx react-native run-android",
     "ios": "npx react-native run-ios",
     "lint": "eslint .",
     "start": "export NODE_OPTIONS=--openssl-legacy-provider && export OPENSSL_CONF=/dev/null && npx react-native start",
