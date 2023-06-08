@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { Message, APIResponse, Plant, User, LoginResponse } from '../types/types';
+import { Platform } from 'react-native';
+
+//TODO: Besa replaces android IP with his actual IP
+const BASE_API_URL = Platform.select({
+  ios: 'http://localhost:81/api',
+  android: 'http://XX.X.X.X:3000/api',
+});
 
 // ================== HTTP Helper Functions ==================== //
-
-const BASE_API_URL = 'http://localhost:81/api';
 
 async function getFromAPI<T>(endpoint: string): Promise<APIResponse<T>> {
   try {
