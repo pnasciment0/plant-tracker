@@ -72,9 +72,9 @@ async function getMe(): Promise<APIResponse<User, string>> {
   } 
 }
 
-async function userLogout(user: User): Promise<Message> {
+async function userLogout(): Promise<Message> {
   try {
-    const response = await postToAPI(`${BASE_API_URL}/users/logout`, user);
+    const response = await postToAPI(`${BASE_API_URL}/users/logout`, {});
     return { msg: response.data as string}
   } catch (error: any) {
     throw error;
@@ -117,7 +117,8 @@ const fns = {
   fetchAllPlants,
   getMe,
   registerUser,
-  userLogin
+  userLogin,
+  userLogout
 };
 
 export default fns;

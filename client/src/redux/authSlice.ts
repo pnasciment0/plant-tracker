@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import ApiFunctions from '../api/apiHelper';
 import { User, Message, APIResponse, LoginResponse } from '../types/types';
 
@@ -57,6 +57,30 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk(
+  'auth/logoutUser',
+  async (_, thunkAPI) => {
+    try {
+      const response = await ApiFunctions.userLogout();
+      if ('error' in response) {
+        console.log("ERROR");
+        console.log(response);
+        return thunkAPI.rejectWithValue(response.error);
+      } else {
+        console.log(response);
+        thunkAPI.dispatch(resetUserData()); 
+        console.log("JUST LOGGED OUT NOW RETURNING");
+        return response; // Return logout data
+      }
+    } catch (error: any) {
+      console.log("CATCH EXCEPTION");
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resetUserData = createAction('auth/resetUserData');
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -71,6 +95,10 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(resetUserData, (state) => {
+        // Reset state to initial state on user logout
+        return initialState;
+      })
       .addCase(fetchMe.pending, (state) => {
         state.loading = 'loading';
       })
