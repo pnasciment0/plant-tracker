@@ -23,44 +23,36 @@ export const fetchMe = createAsyncThunk(
     try {
       const response = await ApiFunctions.getMe();
       if (response.error) {
+        console.log('fetchMe has error', response.error);
         return rejectWithValue(response.error);
       } else {
-        return response.data; // Return user data
+        return response.data;
       }
     } catch (error: any) {
+      console.log('fetchMe caught an exception', error.message);
       return rejectWithValue(error.message);
     }
   }
 );
 
-// export const loginUser = createAsyncThunk(
-//   'auth/loginUser',
-//   async (credentials: { username: string, password: string }, { rejectWithValue }) => {
-//     try {
-//       const response = await ApiFunctions.userLogin(credentials.username, credentials.password);
-//       if (response.error) {
-//         return rejectWithValue(response.error);
-//       } else {
-//         return response.data; // Return user data
-//       }
-//     } catch (error: any) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async (credentials: { username: string, password: string }, { rejectWithValue }) => {
+  async (credentials: { username: string, password: string }, thunkAPI) => {
     try {
       const response = await ApiFunctions.userLogin(credentials.username, credentials.password);
       if ('error' in response) {
-        return rejectWithValue(response.error);
+        console.log("ERROR");
+        console.log(response);
+        return thunkAPI.rejectWithValue(response.error);
       } else {
+        console.log(response);
+        thunkAPI.dispatch(fetchMe()); 
+        console.log("JUST FIRED GETME NOW RETURNING");
         return response; // Return login data
       }
     } catch (error: any) {
-      return rejectWithValue(error.message);
+      console.log("CATCH EXCEPTION");
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -89,22 +81,27 @@ export const authSlice = createSlice({
         }
       })
       .addCase(fetchMe.rejected, (state, action) => {
+        console.log("FETCH ME REJECTED");
         state.loading = 'idle';
         if (typeof action.payload === 'string') {
           state.errorMessage = action.payload;
         } else if (action.error.message) {
           state.errorMessage = action.error.message;
         }
+        console.log("CASE OVER, PRINTING STATE");
+        console.log(state);
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = 'loading';
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = 'idle';
-        if (action.payload !== undefined) {
-          state.user = action.payload?.data?.user || null;
-          state.token = action.payload?.data?.token || null;
-        }
+        // if (action.payload !== undefined) {
+        //   state.user = action.payload?.data?.user || null;
+        //   state.token = action.payload?.data?.token || null;
+        // }
+        console.log("LOGIN USER FULFILLED PRINTING STATE");
+        console.log(state);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = 'idle';

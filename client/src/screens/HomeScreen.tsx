@@ -14,7 +14,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {user && <Text>Welcome, {user}!</Text>}
+      {user && <Text>Welcome, {user.firstName}!</Text>}
       <Button title="Log out" onPress={handleLogout} />
     </View>
   );

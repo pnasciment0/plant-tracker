@@ -63,12 +63,22 @@ async function fetchAllPlants(): Promise<APIResponse<Plant[]>> {
 
 async function getMe(): Promise<APIResponse<User, string>> {
   // TODO: convert the axios.get call to using getFromAPI() found in this file
+  console.log("GETME")
   try {
     const res = await axios.get(`${BASE_API_URL}/users/me`, { withCredentials: true });
     return res.data;
   } catch (error: any) {
     throw error;
   } 
+}
+
+async function userLogout(user: User): Promise<Message> {
+  try {
+    const response = await postToAPI(`${BASE_API_URL}/users/logout`, user);
+    return { msg: response.data as string}
+  } catch (error: any) {
+    throw error;
+  }
 }
 
 async function registerUser(username: string, password: string): Promise<APIResponse<Message>> {

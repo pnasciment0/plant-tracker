@@ -22,6 +22,9 @@ router.post('/login', [
   check('password', 'Password is required').not().isEmpty()
 ], userController.login);
 
+// Logout
+router.post('/logout', authMiddleware, userController.logout);
+
 // GET /api/users
 router.get('/', userController.getUsers);
 

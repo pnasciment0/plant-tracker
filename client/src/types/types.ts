@@ -23,8 +23,11 @@ export type AuthState = {
 // ================== Wtrd Data ==================== //
 
 export interface User {
-    id: string;
-    name: string;
+    _id: string;
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
 }
 
 export interface Plant {

@@ -34,7 +34,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { store, RootState } from './src/redux/store';
 import { fetchMe } from './src/redux/authSlice';
 import { AuthContext, AuthProvider } from './src/redux/AuthContext';
-import { AuthStackNavigator, MainStackNavigator } from './src/navigation/StackNavigator';
+import Main from './src/navigation/StackNavigator';
 import LoadingScreen from './src/screens/LoadingScreen'
 
 import ApiFunctions from './src/api/apiHelper';
@@ -125,13 +125,7 @@ function App(): JSX.Element {
 
   return (
     <NavigationContainer>
-        {auth.loading === 'loading' ? (
-          <LoadingScreen />  // This could be a simple spinner
-        ) : auth.user ? (
-          <MainStackNavigator />
-        ) : (
-          <AuthStackNavigator />
-        )}
+        <Main/>
     </NavigationContainer>
 );
 }

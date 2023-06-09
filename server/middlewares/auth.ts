@@ -7,8 +7,10 @@ interface IUserToken {
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("hi authMiddleware");
   try {
-    const token = req.header('x-auth-token');
+    const token = req.cookies.token;
+    console.log(token);
     if (!token) {
       return res.status(401).json({ msg: 'No token, authorization denied' });
     }

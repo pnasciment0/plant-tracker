@@ -19,6 +19,7 @@ export const getUsers = async (req: Request, res: Response) => {
   };
 
 export const getAuthUser = async (req: Request, res: Response) => {
+  console.log("Hi get auth user");
 // req.user is assigned in the authMiddleware
 // Assuming that user in req.user only contains the user's ID at this stage
   if (!res.locals.user) {
@@ -31,7 +32,7 @@ export const getAuthUser = async (req: Request, res: Response) => {
     if (!user) {
       res.status(404).send({ error: 'User not found' });
     } else {
-      res.send(user);
+      res.send({ data: user });
     }
   } catch (err) {
     res.status(500).send({ error: 'Server error' });
@@ -85,8 +86,25 @@ export const login = async (req: Request, res: Response) => {
   user.tokens.push({ token });
   await user.save();
 
-  res.json({ token });
+  console.log("SUCCESSFUL LOGIN, User: " + username);
+
+  res.cookie('token', token, { httpOnly: true, maxAge: 3600000});
+  res.sendStatus(200);
 };
+
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const user = res.locals.user;
+    user.tokens = user.tokens.filter((token: any) => {
+        return token.token !== req.cookies.token;
+    });
+    await user.save();
+
+    res.send({ message: 'Logout successful.' });
+  } catch (error) {
+    res.status(500).send({ error: 'Logout failed, please try again.' });
+  }
+}
 
   // ========= ADD/REMOVE LOCATION ==========
 
