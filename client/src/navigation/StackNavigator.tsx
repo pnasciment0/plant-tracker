@@ -6,6 +6,7 @@ import { RootState } from '../redux/store'; // import the RootState from your st
 import LoginPage from '../screens/LoginScreen';
 import MainPage from '../screens/HomeScreen';
 import LoadingScreen from '../screens/LoadingScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 const AuthStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -13,6 +14,7 @@ const MainStack = createStackNavigator();
 const AuthStackNavigator = () => (
   <AuthStack.Navigator>
     <AuthStack.Screen name="Login" component={LoginPage} />
+    <AuthStack.Screen name="Register" component={RegisterScreen} />
     {/* Include any other screens for unauthenticated users here */}
   </AuthStack.Navigator>
 );
