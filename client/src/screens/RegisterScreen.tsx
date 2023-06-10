@@ -6,6 +6,7 @@ import ApiFunctions from '../api/apiHelper';
 const RegisterScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleRegister = async () => {
     // We'll register a user using the API helper function
@@ -30,6 +31,11 @@ const RegisterScreen = () => {
         onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
+      />
+      <TextInput 
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
       />
       <Button title="Register" onPress={handleRegister} />
     </View>

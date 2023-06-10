@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import ApiFunctions from '../api/apiHelper';
 import { User, Message, APIResponse, LoginResponse } from '../types/types';
@@ -15,6 +15,11 @@ const initialState: State = {
   errorMessage: null,
   token: null,
   loading: 'idle'
+};
+
+type AuthReducers = {
+  logout: (state: State) => void;
+  authError: (state: State, action: PayloadAction<string>) => void;
 };
 
 export const fetchMe = createAsyncThunk(
@@ -81,7 +86,7 @@ export const logoutUser = createAsyncThunk(
 
 export const resetUserData = createAction('auth/resetUserData');
 
-export const authSlice = createSlice({
+export const authSlice = createSlice<State, AuthReducers>({
   name: 'auth',
   initialState,
   reducers: {

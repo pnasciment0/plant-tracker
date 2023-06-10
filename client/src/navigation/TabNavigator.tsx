@@ -1,36 +1,51 @@
-import { View, Text } from 'react-native';
-
-// Import the necessary modules
+// /navigation/TabNavigator.tsx
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useTheme } from '@react-navigation/native';
+import Icon from 'react-native-remix-icon';
 
-// Assume these are your two screens
-function HomeScreen() {
-  return (
-    <View>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
+import HomeScreen from '../screens/HomeScreen';
+import SpreadsheetView from '../screens/SpreadsheetView';
+import LocationsView from '../screens/LocationsView';
 
-function SettingsScreen() {
-  return (
-    <View>
-      <Text>Settings Screen</Text>
-    </View>
-  );
-}
-
-// Create the bottom tab navigator
 const Tab = createBottomTabNavigator();
 
-function App() {
-  console.log("hi");
-  return (
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-  );
-}
+const TabNavigator = () => {
+  const { colors } = useTheme();
 
-export default App;
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName = 'home'; 
+
+          switch (route.name) {
+            case 'Home':
+              iconName = 'home';
+              // iconName = focused ? 'home' : 'home-outline';
+              break;
+            case 'Spreadsheet':
+              iconName = 'grid';
+              // iconName = focused ? 'table' : 'table-large';
+              break;
+            case 'Locations':
+              iconName = 'building-4';
+              // iconName = focused ? 'map' : 'map-outline';
+              break;
+          }
+
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.text,
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
+      <Tab.Screen name="Spreadsheet" component={SpreadsheetView} options={{ title: 'Spreadsheet' }} />
+      <Tab.Screen name="Locations" component={LocationsView} options={{ title: 'Locations' }} />
+    </Tab.Navigator>
+  );
+};
+
+export default TabNavigator;

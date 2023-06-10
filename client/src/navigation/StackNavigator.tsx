@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootState } from '../redux/store'; // import the RootState from your store
 
+import TabNavigator from './TabNavigator';
 import LoginPage from '../screens/LoginScreen';
 import MainPage from '../screens/HomeScreen';
 import LoadingScreen from '../screens/LoadingScreen';
@@ -21,7 +22,7 @@ const AuthStackNavigator = () => (
 
 const MainStackNavigator = () => (
   <MainStack.Navigator>
-    <MainStack.Screen name="Main" component={MainPage} />
+    <MainStack.Screen name="Main" component={TabNavigator} />
     {/* Include the rest of your app's screens here */}
   </MainStack.Navigator>
 );
