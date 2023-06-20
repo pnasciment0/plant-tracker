@@ -1,5 +1,6 @@
 // authMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
+import { User } from '../models/usersModel';
 import jwt from 'jsonwebtoken';
 
 interface IUserToken {
@@ -16,6 +17,15 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as IUserToken;
+    
+     // Find the user with this token
+     const user = await User.findOne({ _id: decoded._id, 'tokens.token': token });
+
+     // No user with this token, so it's not valid!
+     if (!user) {
+       return res.status(401).json({ msg: 'Token is not valid' });
+     }
+ 
     res.locals.user = { id: decoded._id };
 
     next();

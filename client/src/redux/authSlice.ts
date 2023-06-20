@@ -45,18 +45,17 @@ export const loginUser = createAsyncThunk(
   async (credentials: { username: string, password: string }, thunkAPI) => {
     try {
       const response = await ApiFunctions.userLogin(credentials.username, credentials.password);
-      if ('error' in response) {
-        console.log("ERROR");
-        console.log(response);
-        return thunkAPI.rejectWithValue(response.error);
-      } else {
-        console.log(response);
+
+      if (typeof response.data === 'string' && response.data === "OK") {
+        console.log("SUCCESS LOGGING IN");
         thunkAPI.dispatch(fetchMe()); 
-        console.log("JUST FIRED GETME NOW RETURNING");
         return response; // Return login data
+      } else {
+        console.log("ERROR LOGGING IN");
+        return thunkAPI.rejectWithValue(response.error);
       }
     } catch (error: any) {
-      console.log("CATCH EXCEPTION");
+      console.log("ERROR - CATCH CLAUSE TRIGGERING");
       return thunkAPI.rejectWithValue(error.message);
     }
   }

@@ -100,6 +100,8 @@ export const logout = async (req: Request, res: Response) => {
     });
     await user.save();
 
+    res.clearCookie('token');
+
     res.send({ message: 'Logout successful.' });
   } catch (error) {
     res.status(500).send({ error: 'Logout failed, please try again.' });
