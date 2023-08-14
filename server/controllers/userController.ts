@@ -8,6 +8,18 @@ require('dotenv').config();
 
 import { Request, Response } from 'express';
 
+  // ========= Helper Function ==========
+
+const generateResetToken = () => {
+  const token = jwt.sign({ purpose: 'password-reset '}, process.env.RESET_TOKEN_SECRET as string, {
+    expiresIn: '1 hour'
+  });
+
+  return token;
+}
+
+  // ========= Basic Logic ==========
+
 export const getUsers = async (req: Request, res: Response) => {
     try {
       const users = await User.find();
@@ -107,6 +119,22 @@ export const logout = async (req: Request, res: Response) => {
     res.status(500).send({ error: 'Logout failed, please try again.' });
   }
 }
+
+// export const forgotPassword = async (req: Request, res: Response) => {
+//   try {
+//     const { email } = req.body;
+
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(400).json({ error: 'Invalid email address' });
+//     }
+
+//     const resetToken = generateResetToken();
+
+    
+
+//   }
+// }
 
   // ========= ADD/REMOVE LOCATION ==========
 
